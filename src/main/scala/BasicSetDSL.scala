@@ -2,25 +2,25 @@ package org.cs474.setdsl
 import scala.collection.mutable
 
 object BasicSetDSL {
-  type BasicType = List[Any]
+  type BasicType = Set[Any]
   enum Expression {
     case Value(input: Any)
     case Var(name: String)
-    case Insert(args: List[Expression])
+    case Insert(args: Seq[Expression])
     case Assign(variable: Var, set: Insert)
-    case Delete(from: Var, what: Expression)
+    case Delete(expression: Expression)
     case Add(exp1: Expression, exp2: Expression)
     case Sub(exp1: Expression, exp2: Expression)
-    private val globalScope: mutable.Map[String, List[Any]] = mutable.Map()
+    private val globalScope: mutable.Map[String, Set[Any]] = mutable.Map()
 
-    def evaluate(): List[Any] = {
+    def evaluate(): Set[Any] = {
       this match {
-        case Value(i) => List(i)
+        case Value(i) => Set(i)
         case Var(name: String) => {
           globalScope.get(name) match {
             case Some(v) => v
             case _ => {
-              globalScope ++ Map(name -> List())
+              globalScope ++ Map(name -> Set())
               globalScope(name)
             }
           }
@@ -32,16 +32,16 @@ object BasicSetDSL {
           ret
         }
 
-        case Insert(args: List[Expression]) => {
-          def recursive(head: Expression, tail: List[Expression]): List[Any] = {
-            if (tail.size == 0) head.evaluate()
-            head.evaluate() ++ recursive(tail.head, tail.tail)
+        case Insert(args: Seq[Expression]) => {
+          def recursive(head: Expression, tail: Seq[Expression]): Set[Any] = {
+            if (tail.length == 0) head.evaluate()
+            head.evaluate() ++ recursive(tail(0), tail.slice(1, tail.length))
           }
-          recursive(args.head, args.tail)
+          recursive(args(0), args.slice(1, args.length))
         }
 
-        case Delete(from: Var, what: Expression) => {
-          from.evaluate()
+        case Delete(expression: Expression) => {
+          expression.evaluate()
         }
         case Add(exp1: Expression, exp2: Expression) => exp1.evaluate() + exp2.evaluate()
         case Sub(exp1: Expression, exp2: Expression) => exp1.evaluate() - exp2.evaluate()
