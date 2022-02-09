@@ -7,10 +7,6 @@ object BasicSetDSL {
   type BasicType = Set[Any]
   private val globalScope: mutable.Map[String, Any] = mutable.Map()
 
-//  case class NewMacro(name: String, expression: Expression) {
-//    globalScope.put(name, expression)
-//  }
-
   object Macro {
     def apply(name: String): Expression = {
       globalScope.get(name) match {

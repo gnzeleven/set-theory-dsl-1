@@ -27,14 +27,5 @@ object Driver {
     val aMacro = Macro("aMacro", Var("x"))
     val finalExp = Assign(Var("z"), Macro("aMacro"))
     println(finalExp.evaluate())
-
-//    val set1 = Set(1,2,3,4)
-//    val set2 = Set(3,4,5,6)
-//    val fm = set1.flatMap(element1 => set2.map(element2 => (element1, element2)))
-//    println(fm)
-//
-//    val map = scala.collection.mutable.Map[String, Any]()
-//    map.put("a", 2)
-//    println(map.get("b"))
   }
 }
