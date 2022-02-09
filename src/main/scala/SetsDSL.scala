@@ -37,14 +37,10 @@ object SetsDSL {
           }
         }
 
-        case Insert(args: ) => {
-
-        }
-
 
         case Var(name: String) => globalScope(name)
-        case Add(exp1: Expression, exp2: Expression) => exp1.evaluate() + exp2.evaluate()
-        case Sub(exp1: Expression, exp2: Expression) => exp1.evaluate() - exp2.evaluate()
+        //case Add(exp1: Expression, exp2: Expression) => exp1.evaluate() + exp2.evaluate()
+        //case Sub(exp1: Expression, exp2: Expression) => exp1.evaluate() - exp2.evaluate()
       }
     }
   }
