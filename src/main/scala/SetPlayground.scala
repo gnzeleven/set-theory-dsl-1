@@ -6,10 +6,10 @@ import utils.CreateLogger
 import utils.TestExpressions.*
 
 /**
- * Factory for [[Driver]] instances
+ * Factory for [[SetPlayground]] instances
  * The workflow starts here
  * */
-object Driver {
+object SetPlayground {
   val logger = CreateLogger(this.getClass)
 
   /** Main Method
@@ -46,5 +46,21 @@ object Driver {
     logger.info("Evaluation: " + testExpression.evaluate())
 
     logger.info("Evaluation: " + Scope("scope1", Scope("scope2", Var("newMeaningOfLife"))).evaluate())
+    logger.info("*************************************************************************************")
+
+    // dummy set operations
+    logger.info("Evaluating some dummy set expressions...")
+    Assign(testVar1, testValue1).evaluate()
+    Scope("scope1", Assign(testVar2, Insert(Seq(testValue2, Value("We gotta blend in. River dance!"))))).evaluate()
+    testExpression1.evaluate()
+    testExpression2.evaluate()
+
+    logger.info("Union: " + Scope("scope1", Scope("scope2", Union(Var("set1"), Var("set2")))).evaluate())
+    logger.info("Intersection: " + Scope("scope1", Scope("scope2", Intersection(Var("set1"), Var("set2")))).evaluate())
+    logger.info("Difference: " + Scope("scope1", Scope("scope2", Difference(Var("set1"), Var("set2")))).evaluate())
+    logger.info("SymmetricDifference: " +
+      Scope("scope1", Scope("scope2", SymmetricDifference(Var("set1"), Var("set2")))).evaluate())
+    logger.info("CartesianProduct: " +
+      Scope("scope1", Scope("scope2", CartesianProduct(Var("set1"), Var("set2")))).evaluate())
   }
 }
