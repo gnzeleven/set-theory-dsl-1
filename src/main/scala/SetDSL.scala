@@ -96,7 +96,7 @@ object SetDSL {
     protected def _evaluate(): HashSet[Any] = {
       this match {
         // value - returns set(value)
-        case Value(i) => HashSet[Any](i)
+        case Value(input: Any) => HashSet[Any](input)
 
         // var - if var exists in the map returns a set
         // otherwise create a new set for the var
@@ -111,10 +111,8 @@ object SetDSL {
               executionScope.contains(name) match {
                 case true => executionScope(name).asInstanceOf[HashSet[Any]]
                 case false => {
+                  logger.info(s"Variable(${name}) doesn't exist in any scope")
                   HashSet[Any]()
-//                  currentScope.put(name, HashSet[Any]())
-//                  executionScope ++= currentScope
-//                  currentScope(name).asInstanceOf[HashSet[Any]]
                 }
               }
             }
@@ -130,6 +128,7 @@ object SetDSL {
           // update the current state and the cache
           currentScope.put(variable.name, ret)
           executionScope ++= currentScope
+          logger.info("Insert set success, updated execution context")
           ret
         }
 
@@ -139,6 +138,7 @@ object SetDSL {
           val ret = variable._evaluate() ++ value._evaluate()
           currentScope.put(variable.name, ret)
           executionScope ++= currentScope
+          logger.info("Insert value success, updated execution context")
           ret
         }
 
@@ -167,7 +167,9 @@ object SetDSL {
           }
           // call the updateState method with currentScope
           try {
+            logger.info(s"Trying to dete Variable(${variable.name})")
             _updateState(variable.name, currentScope)
+            logger.info(s"Delete Variable(${variable.name}) success, context updated")
           } catch {
             case ex: RuntimeException => ex.printStackTrace()
           }
@@ -203,7 +205,9 @@ object SetDSL {
           //_updateState(variable.name, currentScope)
           // call the updateState method with currentScope
           try {
+            logger.info(s"Trying to update Variable(${variable.name})")
             _updateState(variable.name, currentScope)
+            logger.info(s"Update Variable(${variable.name}) success, context updated")
           } catch {
             case ex: RuntimeException => ex.printStackTrace()
           }
@@ -220,7 +224,6 @@ object SetDSL {
         case Assign(variable: Var, expression: Expression) => {
           val ret = expression._evaluate()
           currentScope.put(variable.name, ret)
-          //println(searchScope)
           ret
         }
 
@@ -261,26 +264,20 @@ object SetDSL {
 
         // check if an object exist in a scope
         case Check(variable: Var, value: Value) => {
+          logger.info(s"Checking if Value(${value.input}) exists in Variable(${variable.name})")
           HashSet(variable._evaluate() contains value._evaluate().head)
         }
 
         // return union of set A evaluated by expression1
         // and set B evaluated by expression
         case Union(expression1: Expression, expression2: Expression) => {
-          def _union(set1 : HashSet[Any], set2 : HashSet[Any]): HashSet[Any] = {
-            set1.flatMap(a => set2 + a)
-          }
-          val exp1 = expression1._evaluate()
-          val exp2 = expression2._evaluate()
-          val ret = _union(expression1._evaluate(), expression2._evaluate())
-          ret.asInstanceOf[HashSet[Any]]
+            expression1._evaluate() ++ expression2._evaluate()
         }
 
         // return intersection of set A evaluated by expression1
         // and set B evaluated by expression2
         case Intersection(expression1: Expression, expression2: Expression) => {
-          val ret = expression1._evaluate() intersect expression2._evaluate()
-          ret
+          expression1._evaluate() intersect expression2._evaluate()
         }
 
         // return difference between set A evaluated by expression1
@@ -294,13 +291,7 @@ object SetDSL {
         case SymmetricDifference(expression1: Expression, expression2: Expression) => {
           val set1 = expression1._evaluate()
           val set2 = expression2._evaluate()
-          val union = set1 ++ set2
-          val intersect = set1 intersect set2
-          println("Set1 " + set1)
-          println("Set2 " + set2)
-          println("Union " + union)
-          println("Intersection " + intersect)
-          union diff intersect
+          (set1 diff set2) ++ (set2 diff set1)
         }
 
         // return pairwise (a, b) for all a, b in set A and set B
@@ -313,6 +304,7 @@ object SetDSL {
 
         // create a new scope or update the current scope
         case Scope(name: String, expression: Expression) => {
+          // create a new scope within current scope if it doesnt exist
           if (!currentScope.contains(name)) {
             val newScope = mutable.Map[String, Any]()
             newScope.put(_NAME_, name)
@@ -320,9 +312,12 @@ object SetDSL {
             currentScope.put(name, newScope)
             stringToMap.put(name, newScope)
           }
+          // update the cache with current scope
           executionScope ++= currentScope
+          // change the current scope to new scope
           currentScope = currentScope(name).asInstanceOf[mutable.Map[String, Any]]
           currScopeName = name
+          logger.info(s"Going inside Scope(${name})")
           expression._evaluate()
         }
       }
