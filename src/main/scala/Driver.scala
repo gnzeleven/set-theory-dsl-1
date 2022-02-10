@@ -1,12 +1,9 @@
 package org.cs474.setdsl
 
-//import BasicArithmeticDSL.Expression
-
 import SetDSL.*
 import SetDSL.Expression.*
-import utils.{CreateLogger, ObtainConfigReference}
-
-//import scala.collection.*
+import utils.CreateLogger
+import utils.TestExpressions.*
 
 /**
  * Factory for [[Driver]] instances
@@ -23,8 +20,8 @@ object Driver {
   def main(args: Array[String]): Unit = {
     logger.info("Inside main method... Evaluating some example expressions")
 
-    val testValue: Value = Value("The meaning of life is 42")
-    val testVar: Var = Var("meaningOfLife")
+    testValue.evaluate()
+    testVar.evaluate()
 
     // trying to update a variable that doesnt exist will throw an exception that is handled
     Assign(Var("thisDoesntExist"), Update(Seq(Value("I am trying to update a variable that doesn't exist")))).evaluate()
@@ -45,6 +42,7 @@ object Driver {
         )
       )
     )
+
     logger.info("Evaluation: " + testExpression.evaluate())
 
     logger.info("Evaluation: " + Scope("scope1", Scope("scope2", Var("newMeaningOfLife"))).evaluate())

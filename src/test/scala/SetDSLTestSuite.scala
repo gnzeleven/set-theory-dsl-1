@@ -1,9 +1,8 @@
 package org.cs474.setdsl
 import SetDSL.*
 import SetDSL.Expression.*
-import utils.ObtainConfigReference
+import utils.TestExpressions.*
 
-import com.sun.org.apache.xpath.internal.operations.Variable
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
@@ -11,39 +10,9 @@ import scala.collection.immutable.HashSet
 
 class SetDSLTestSuite extends AnyFlatSpec with Matchers {
 
-  val testValue1: Value = Value("The meaning of life is 42")
-  val testVar1: Var = Var("meaningOfLife")
   Assign(testVar1, testValue1).evaluate()
-
-  val testValue2: Value = Value("Kowalski, Analysis")
-  val testVar2: Var = Var("skipper")
   Scope("scope1", Assign(testVar2, Insert(Seq(testValue2, Value("We gotta blend in. River dance!"))))).evaluate()
-
-  val testExpression1: Expression = Scope(
-    "scope1", Scope(
-      "scope2", Assign(
-        Var("set1"), Insert(
-          Seq(Value("1.1618"), Value("e^(i*pi)=-1"), Value(1),
-            Var("meaningOfLife"), Value(2), Value(3), Value(4),
-            Value("This is from set1")
-          )
-        )
-      )
-    )
-  )
   testExpression1.evaluate()
-
-  val testExpression2: Expression = Scope(
-    "scope1", Scope(
-      "scope2", Assign(
-        Var("set2"), Insert(
-          Seq(Value("2.7182"), Value("May the force be with you!"), Value(1),
-            Var("meaningOfLife"), Value("This is from set 2"), Value(4)
-          )
-        )
-      )
-    )
-  )
   testExpression2.evaluate()
 
   // assert type expression
@@ -116,8 +85,8 @@ class SetDSLTestSuite extends AnyFlatSpec with Matchers {
   }
 
   // assert set operations
-  val set1 = Scope("scope1", Scope("scope2", Var("set1"))).evaluate()
-  val set2 = Scope("scope1", Scope("scope2", Var("set2"))).evaluate()
+  val set1 = testScopeExpression1.evaluate()
+  val set2 = testScopeExpression2.evaluate()
 
   // union operation
   it should "verify Union operation of two sets" in {
