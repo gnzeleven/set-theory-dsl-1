@@ -44,7 +44,11 @@ object Driver {
     //    println(Scope("scope1", SymmetricDifference(Var("set1"), Var("set2"))).evaluate())
     val testValue: Value = Value("The meaning of life is 42")
     val testVar: Var = Var("meaningOfLife")
+
+    Assign(Var("thisDoesntExist"), Update(Seq(Value("I am trying to update a variable that doesn't exist")))).evaluate()
     println(Assign(testVar, testValue).evaluate())
+
+    Assign(Var("thisDoesntExist"), Delete(Seq(Value("I am trying to delete a variable that doesn't exist")))).evaluate()
 
     Macro("m", Var("meaningOfLife"))
 

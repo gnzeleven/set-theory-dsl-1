@@ -111,9 +111,10 @@ object SetDSL {
               executionScope.contains(name) match {
                 case true => executionScope(name).asInstanceOf[HashSet[Any]]
                 case false => {
-                  currentScope.put(name, HashSet[Any]())
-                  executionScope ++= currentScope
-                  currentScope(name).asInstanceOf[HashSet[Any]]
+                  HashSet[Any]()
+//                  currentScope.put(name, HashSet[Any]())
+//                  executionScope ++= currentScope
+//                  currentScope(name).asInstanceOf[HashSet[Any]]
                 }
               }
             }
@@ -154,14 +155,12 @@ object SetDSL {
               // scope recursively check all its parent scopes
               // and update the status
               case false => {
-                val parent:String = scope(_PARENT_).toString
-                val parentScope = stringToMap(parent)
-                if (parentScope != None) {
+                val parent: String = scope(_PARENT_).toString
+                if (parent != "None") {
+                  val parentScope = stringToMap(parent)
                   _updateState(name, parentScope)
                 } else {
-                  // if the variable doesn't exist in any of the possible
-                  // scopes, throw an exception
-                  new RuntimeException("Variable doesn't exist in any scope")
+                  throw new RuntimeException("Cannot delete a variable that doesn't exist in any scope")
                 }
               }
             }
@@ -191,16 +190,17 @@ object SetDSL {
                 // if the scope in question doesn't contain
                 // the variable, recursively check all its
                 // parent scopes and update the status
-                val parent:String = scope(_PARENT_).toString
-                val parentScope = stringToMap(parent)
-                if (parentScope != None) {
+                val parent: String = scope(_PARENT_).toString
+                if (parent != "None") {
+                  val parentScope = stringToMap(parent)
                   _updateState(name, parentScope)
                 } else {
-                  new RuntimeException("Variable doesn't exist in any scope")
+                  throw new RuntimeException("Cannot update a variable that doesn't exist in any scope")
                 }
               }
             }
           }
+          //_updateState(variable.name, currentScope)
           // call the updateState method with currentScope
           try {
             _updateState(variable.name, currentScope)
