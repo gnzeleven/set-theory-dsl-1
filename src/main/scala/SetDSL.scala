@@ -1,5 +1,5 @@
 package org.cs474.setdsl
-import org.cs474.setdsl.Utils.CreateLogger
+import org.cs474.setdsl.utils.CreateLogger
 
 import scala.collection.immutable.HashSet
 import scala.collection.mutable
@@ -111,7 +111,7 @@ object SetDSL {
               executionScope.contains(name) match {
                 case true => executionScope(name).asInstanceOf[HashSet[Any]]
                 case false => {
-                  logger.info(s"Variable(${name}) doesn't exist in any scope")
+                  logger.info(s"Variable(\"${name}\") does not exist in any scope")
                   HashSet[Any]()
                 }
               }
@@ -151,7 +151,7 @@ object SetDSL {
           def _updateState(name: String, scope: mutable.Map[String, Any]): Unit = {
             scope.contains(name) match {
               case true => scope.put(name, ret)
-              // if the variable doesn't exist in the current
+              // if the variable does not exist in the current
               // scope recursively check all its parent scopes
               // and update the status
               case false => {
@@ -160,14 +160,14 @@ object SetDSL {
                   val parentScope = stringToMap(parent)
                   _updateState(name, parentScope)
                 } else {
-                  throw new RuntimeException("Cannot delete a variable that doesn't exist in any scope")
+                  throw new RuntimeException("Cannot delete a variable that does not exist in any scope")
                 }
               }
             }
           }
           // call the updateState method with currentScope
           try {
-            logger.info(s"Trying to dete Variable(${variable.name})")
+            logger.info(s"Trying to delete Variable(\"${variable.name}\")")
             _updateState(variable.name, currentScope)
             logger.info(s"Delete Variable(${variable.name}) success, context updated")
           } catch {
@@ -189,7 +189,7 @@ object SetDSL {
             scope.contains(name) match {
               case true => scope.put(name, ret)
               case false => {
-                // if the scope in question doesn't contain
+                // if the scope in question does not contain
                 // the variable, recursively check all its
                 // parent scopes and update the status
                 val parent: String = scope(_PARENT_).toString
@@ -197,7 +197,7 @@ object SetDSL {
                   val parentScope = stringToMap(parent)
                   _updateState(name, parentScope)
                 } else {
-                  throw new RuntimeException("Cannot update a variable that doesn't exist in any scope")
+                  throw new RuntimeException("Cannot update a variable that does not exist in any scope")
                 }
               }
             }
@@ -205,7 +205,7 @@ object SetDSL {
           //_updateState(variable.name, currentScope)
           // call the updateState method with currentScope
           try {
-            logger.info(s"Trying to update Variable(${variable.name})")
+            logger.info(s"Trying to update Variable(\"${variable.name}\")")
             _updateState(variable.name, currentScope)
             logger.info(s"Update Variable(${variable.name}) success, context updated")
           } catch {
@@ -264,7 +264,7 @@ object SetDSL {
 
         // check if an object exist in a scope
         case Check(variable: Var, value: Value) => {
-          logger.info(s"Checking if Value(${value.input}) exists in Variable(${variable.name})")
+          logger.info(s"Checking if Value(${value.input}) exists in Variable(\"${variable.name}\")")
           HashSet(variable._evaluate() contains value._evaluate().head)
         }
 
@@ -304,7 +304,7 @@ object SetDSL {
 
         // create a new scope or update the current scope
         case Scope(name: String, expression: Expression) => {
-          // create a new scope within current scope if it doesnt exist
+          // create a new scope within current scope if it does not exist
           if (!currentScope.contains(name)) {
             val newScope = mutable.Map[String, Any]()
             newScope.put(_NAME_, name)

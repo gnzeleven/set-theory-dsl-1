@@ -1,7 +1,7 @@
 package org.cs474.setdsl
 import SetDSL.*
 import SetDSL.Expression.*
-import Utils.ObtainConfigReference
+import utils.ObtainConfigReference
 
 import com.sun.org.apache.xpath.internal.operations.Variable
 import org.scalatest.flatspec.AnyFlatSpec

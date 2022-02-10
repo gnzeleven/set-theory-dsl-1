@@ -1,5 +1,5 @@
 package org.cs474.setdsl
-package Utils
+package utils
 
 import org.slf4j.{Logger, LoggerFactory}
 
