@@ -22,6 +22,7 @@ object SetDSL {
 
   // set current scope - will get updates whenever scope is changed
   // declared as private var and they cannot be accessed outside SetDSL object
+  // this is (possibly) the only places where side effects happen
   private var currScopeName = "global"
   private var currentScope = globalScope
   stringToMap.put(currScopeName, globalScope)
@@ -93,6 +94,7 @@ object SetDSL {
       this._evaluate()
     }
 
+    // _evaluate() - the crux lies here
     protected def _evaluate(): HashSet[Any] = {
       this match {
         // value - returns set(value)

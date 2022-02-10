@@ -44,12 +44,12 @@ object SetPlayground {
     )
 
     logger.info("Evaluation: " + testExpression.evaluate())
-
     logger.info("Evaluation: " + Scope("scope1", Scope("scope2", Var("newMeaningOfLife"))).evaluate())
     logger.info("*************************************************************************************")
 
     // dummy set operations
     logger.info("Evaluating some dummy set expressions...")
+
     Assign(testVar1, testValue1).evaluate()
     Scope("scope1", Assign(testVar2, Insert(Seq(testValue2, Value("We gotta blend in. River dance!"))))).evaluate()
     testExpression1.evaluate()
