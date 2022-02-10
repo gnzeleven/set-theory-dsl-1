@@ -268,6 +268,25 @@ object SetDSL {
           HashSet(variable._evaluate() contains value._evaluate().head)
         }
 
+        // create a new scope or update the current scope
+        case Scope(name: String, expression: Expression) => {
+          // create a new scope within current scope if it does not exist
+          if (!currentScope.contains(name)) {
+            val newScope = mutable.Map[String, Any]()
+            newScope.put(_NAME_, name)
+            newScope.put(_PARENT_, currScopeName)
+            currentScope.put(name, newScope)
+            stringToMap.put(name, newScope)
+          }
+          // update the cache with current scope
+          executionScope ++= currentScope
+          // change the current scope to new scope
+          currentScope = currentScope(name).asInstanceOf[mutable.Map[String, Any]]
+          currScopeName = name
+          logger.info(s"Going inside Scope(${name})")
+          expression._evaluate()
+        }
+
         // return union of set A evaluated by expression1
         // and set B evaluated by expression
         case Union(expression1: Expression, expression2: Expression) => {
@@ -300,25 +319,6 @@ object SetDSL {
           val set1 = expression1._evaluate()
           val set2 = expression2._evaluate()
           set1.flatMap(element1 => set2.map(element2 => (element1, element2)))
-        }
-
-        // create a new scope or update the current scope
-        case Scope(name: String, expression: Expression) => {
-          // create a new scope within current scope if it does not exist
-          if (!currentScope.contains(name)) {
-            val newScope = mutable.Map[String, Any]()
-            newScope.put(_NAME_, name)
-            newScope.put(_PARENT_, currScopeName)
-            currentScope.put(name, newScope)
-            stringToMap.put(name, newScope)
-          }
-          // update the cache with current scope
-          executionScope ++= currentScope
-          // change the current scope to new scope
-          currentScope = currentScope(name).asInstanceOf[mutable.Map[String, Any]]
-          currScopeName = name
-          logger.info(s"Going inside Scope(${name})")
-          expression._evaluate()
         }
       }
     }
