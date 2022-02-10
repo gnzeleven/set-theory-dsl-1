@@ -8,7 +8,7 @@ val logbackVersion = "1.3.0-alpha10"
 val sfl4sVersion = "2.0.0-alpha5"
 val typesafeConfigVersion = "1.4.1"
 val scalacticVersion = "3.2.9"
-val slf4jVersion = "1.2"
+val slf4jVersion = "1.7.10"
 
 libraryDependencies ++= Seq(
   "ch.qos.logback" % "logback-core" % logbackVersion,

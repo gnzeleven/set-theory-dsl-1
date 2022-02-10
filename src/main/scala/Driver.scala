@@ -1,11 +1,12 @@
 package org.cs474.setdsl
 
 //import BasicArithmeticDSL.Expression
+
 import SetDSL.*
 import SetDSL.Expression.*
 import Utils.{CreateLogger, ObtainConfigReference}
 
-// import scala.collection.mutable.*
+//import scala.collection.*
 
 /**
  * Factory for [[Driver]] instances
@@ -13,7 +14,9 @@ import Utils.{CreateLogger, ObtainConfigReference}
  * */
 object Driver {
   val logger = CreateLogger(this.getClass)
+
   /** Main Method
+   *
    * @param args : Array[String] - command line input
    * @return Unit
    */
@@ -23,24 +26,54 @@ object Driver {
       case None => throw new RuntimeException("Cannot obtain a reference to the config data.")
     }
     logger.info("works")
-    //val someExpression = Sub(Add(Add(Value(2), Value(3)),Var("z")), Var("x")).evaluate()
-    Assign(Var("x"), Insert(Seq(Var("xy"), Value("xy"), Value(12)))).evaluate()
-    val exp = Scope("scopename", Scope("othername", Assign(Var("someSetName"), Insert(Seq(Var("x"), Value(18), Value("somestring"))))))
-    println(exp.evaluate())
-    //    Assign(Var("x"), Insert(Seq(Value(1)))).evaluate()
-    //    val aMacro = Macro("aMacro", Var("x"))
-    //    val finalExp = Assign(Var("z"), Macro("aMacro"))
-    //    println(finalExp.evaluate())
+    //Assign(Var("xy"), Value("spl")).evaluate()
+    //    Scope("scope1", Assign(Var("set_"), Insert(Seq(Var("xy"), Value(88))))).evaluate()
+    //    Scope("scope1", Assign(Var("set1"), Insert(Seq(Var("set_"), Value(100), Value(true))))).evaluate()
+    //    Scope("scope1", Assign(Var("set2"), Insert(Seq(Var("set_"), Value(105), Value(true))))).evaluate()
+    //Scope("scope1", Assign(Var("set2"), Insert(Seq(Var("set_"), Value(12))))).evaluate()
+    //Assign(Var("x"), Insert(Seq(Var("xy"), Value("xy"), Value(12)))).evaluate()
+    //Scope("scope1", Scope("scope2", Assign(Var("x"), Insert(Seq(Var("xy"), Value("scop1")))))).evaluate()
+    //println(Scope("scope1", Scope("scope2", Check(Var("x"), Value("scop1")))).evaluate())
+    //Scope("scope1", Scope("scope2", Assign(Var("x"), Insert(Seq(Var("xy"), Value(42), Value("works?")))))).evaluate()
+    //Macro("m", Delete(Seq(Var("xy"))))
+    //println(Scope("scope1", Scope("scope2", Assign(Var("x"), Macro("m")))).evaluate())
+
+    //    println(Scope("scope1", Union(Var("set1"), Var("set2"))).evaluate())
+    //    println(Scope("scope1", Intersection(Var("set1"), Var("set2"))).evaluate())
+    //    println(Scope("scope1", Difference(Var("set1"), Var("set2"))).evaluate())
+    //    println(Scope("scope1", SymmetricDifference(Var("set1"), Var("set2"))).evaluate())
+    val testValue: Value = Value("The meaning of life is 42")
+    val testVar: Var = Var("meaningOfLife")
+    println(Assign(testVar, testValue).evaluate())
+
+    Macro("m", Var("meaningOfLife"))
+
+    val testExpression = Scope(
+      "scope1", Scope(
+        "scope2", Assign(
+          Var("newMeaningOfLife"), Insert(Seq(Macro("m")))
+        )
+      )
+    )
+    println(testExpression.evaluate())
+
+    println(Scope("scope1", Scope("scope2", Var("newMeaningOfLife"))).evaluate())
+
+//    val testExpression1: Expression = Scope(
+//      "scope1", Scope(
+//        "scope2", Assign(
+//          Var("set1"), Insert(
+//            Seq(Value("1.1618"), Value("e^(i*pi)=-1"), Value(1),
+//              Var("meaningOfLife"), Value(2), Value(3), Value(4),
+//              Value("This is from set1")
+//            )
+//          )
+//        )
+//      )
+//    )
+//    testExpression1.evaluate()
 
 
 
-    //    val set1 = Set(1,2,3,4)
-    //    val set2 = Set(3,4,5,6)
-    //    val fm = set1.flatMap(element1 => set2.map(element2 => (element1, element2)))
-    //    println(fm)
-    //
-    //    val map = scala.collection.mutable.Map[String, Any]()
-    //    map.put("a", 2)
-    //    println(map.get("b"))
   }
 }
