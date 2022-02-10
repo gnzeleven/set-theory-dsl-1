@@ -129,7 +129,6 @@ object SetDSL {
           // update the current state and the cache
           currentScope.put(variable.name, ret)
           executionScope ++= currentScope
-          //println(globalScope)
           ret
         }
 
@@ -139,7 +138,6 @@ object SetDSL {
           val ret = variable._evaluate() ++ value._evaluate()
           currentScope.put(variable.name, ret)
           executionScope ++= currentScope
-          //println(globalScope)
           ret
         }
 
@@ -169,7 +167,12 @@ object SetDSL {
             }
           }
           // call the updateState method with currentScope
-          _updateState(variable.name, currentScope)
+          try {
+            _updateState(variable.name, currentScope)
+          } catch {
+            case ex: RuntimeException => ex.printStackTrace()
+          }
+
           // update the cache
           executionScope.put(variable.name, ret)
           ret
@@ -199,7 +202,12 @@ object SetDSL {
             }
           }
           // call the updateState method with currentScope
-          _updateState(variable.name, currentScope)
+          try {
+            _updateState(variable.name, currentScope)
+          } catch {
+            case ex: RuntimeException => ex.printStackTrace()
+          }
+
           // update the cache
           executionScope.put(variable.name, ret)
           ret
