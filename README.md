@@ -56,9 +56,9 @@ Tools: IntelliJ IDEA 2021.2.1(Community Edition), jdk 1.8.0_191, Scala 3.0.2, sb
 ##### To build the project:
 * Clone this repository through command line using 
 ```
-> git clone https://github.com/gnzeleven/set-theory-dsl
+> git clone https://github.com/gnzeleven/set-theory-dsl-1
 ```
-* Open IntelliJ IDEA and navigate File -> Open Folder -> set-theory-dsl
+* Open IntelliJ IDEA and navigate File -> Open Folder -> set-theory-dsl-1
 * To run tests, use the command 
 ```
 > sbt clean compile test
