@@ -75,31 +75,43 @@ sequentially in sbt shell
 
 #### Project Structure
 
-set-theory-dsl
-└───src
-    ├───main
-    │   ├───resources
-    │   │   ├───application.conf
-    │   │   ├───logback.xml
-    │   │   └───logback-test.xml
-    │   └───scala
-    │       ├───utils
-    │       │   ├───CreateLogger.scala
-    │       │   └───TestExpressions.scala    
-    │       ├───SetDSL.scala
-    │       └───SetPlayground.scala
-    └───test
-        └───scala
-            └───SetDSLTestSuite.scala
-
+![project-structure](images/project-structure.png)
 
 #### Implementation
 
-!----------------- ToDo -------------------------!
+The underlying data structures used to implement the Domain Specific Language for evaluating set theory expression are mutable Set and mutable Map. Set is abstracted by all the expressions except for the Assign, Macro, and Scope expressions, as they use Map to store the references to the variables in scopes. The primitive expression Variable, on evaluation, returns the set referenced by the variable in the possible scopes and Value abstracts a single constant or literal and return the abstracted literals when evaluated.
 
-#### Results
+Assign, as the name implies, assigns the evaluated expression to the variable in the current scope(for Insert) or in the scope where the variable exists in the case of Update and Delete expressions. The variable's reference is searched for recursively starting from current scope until we encounter the variable or we hit the global scope(meaning the variable does not exist anywhere). In case the variable doesn't exist, the program throws an exception which is handled within the Insert/Delete expression's evaluate method. This is not so for Insert as Insert is equivalent to declaring and defining a variable within the current scope.
 
-!----------------- ToDo -------------------------!
+Check expression evaluates the variable in the execution context cache and we check whether the object is present in the set represented by the variable.
+
+Initially, an Expression that is evaluated starts with current scope as the global scope. Any variables that are evaluated using an Assign statement takes its place in the current scope which is the global scope. Let us assume that a Scope statement is encountered. The program checks if the scope exists within current scope. If it does, just switch the current scope to the scope is called for. Otherwise, create a new scope within the current scope and switch the current scope to the new scope. 
+
+While this is being done, it must be noted that the inner scope can access all the variables within it hierarchy of parent scopes. Inorder to accomplish this in an optimized manner, the current scope is copied to a cache every time context is switched. Now, within the current scope, all the lookup for the variable references are first checked within the current scope(because current scope has the highest priority) and then the program searches in the transient execution context(the cache). This is optimized because the search doesn't happen recursively in all the parent scopes every time we look for a variable's reference, that is to say we limit the search space to the current scope or the cache of execution scope. A tradeoff of memory for perfomance. This is how context switching through Scope statement is handled.
+
+Finally, all the set operations' evaluate methods are defined. Because, the program uses a mutable Set that is encapsulated by the Expression statements. The evaluations of set operations Union, Intersection, Difference, SymmetricDifference, and CartesianProduct are implemented functionally using the methods defined within the Scala's mutable.Set interface. 
+
+#### Sample Execution
+
+```scala
+// create a new variable - meaningOfLife and assign a value
+Assign(Var("meaningOfLife"), Value("The meaning of life is 42")).evaluate()
+// create a new variable - newMeaningOfLife and assign evaluation of an insert statement
+Assign(Var("newMeaningOfLife"), Insert(Seq(Var("meaningOfLife"), Value(42)))).evaluate()
+// trying to update a variable that doesnt exist will throw an exception that is handled
+Assign(Var("thisDoesntExist"), Update(Seq(Value("I do not exist")))).evaluate()
+// create a new macro and execute
+Macro("m", Var("meaningOfLife"))
+Assign(Var("varByMacro"), Insert(Seq(Value(true), Var("meaningOfLife")))).evaluate()
+// using scopes
+Scope("scope1", Assign(Var("varByScope"), Insert(Seq(Value(1.6180), Var("meaningOfLife"))))).evaluate()
+Scope("scope1", Scope("scope2", Check(Var("varByMacro"), true))).evaluate()
+// using set operations
+Scope("scope1", Union(Var("varByMacro"), Var("varByScope"))).evaluate()
+Scope("scope1", Intersection(Var("varByMacro"), Var("varByScope"))).evaluate()
+Scope("scope1", CartesianProduct(Var("varByMacro"), Var("varByScope"))).evaluate()
+
+```
 
 #### Resources
 
