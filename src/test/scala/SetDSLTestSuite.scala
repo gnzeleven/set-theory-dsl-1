@@ -56,7 +56,7 @@ class SetDSLTestSuite extends AnyFlatSpec with Matchers {
         )
       )
     )
-    println(testExpression.evaluate() == HashSet(true))
+    assert(testExpression.evaluate() == HashSet(true))
   }
 
   // assert delete expression
@@ -68,7 +68,7 @@ class SetDSLTestSuite extends AnyFlatSpec with Matchers {
         )
       )
     )
-    println(testExpression.evaluate() == Scope("scope1", testVar2).evaluate() -- testValue2.evaluate())
+    assert(testExpression.evaluate() == Scope("scope1", testVar2).evaluate() -- testValue2.evaluate())
   }
 
   // assert update expression
@@ -81,7 +81,7 @@ class SetDSLTestSuite extends AnyFlatSpec with Matchers {
         )
       )
     )
-    println(testExpression.evaluate() == testValue1.evaluate() ++ testValue.evaluate())
+    assert(testExpression.evaluate() == testValue1.evaluate() ++ testValue.evaluate())
   }
 
   // assert set operations
@@ -122,5 +122,4 @@ class SetDSLTestSuite extends AnyFlatSpec with Matchers {
     } yield((element1, element2))
     assert(set == anotherSet)
   }
-
 }

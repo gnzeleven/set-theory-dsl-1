@@ -93,6 +93,8 @@ Finally, all the set operations' evaluate methods are defined. Because, the prog
 
 #### Sample Execution
 
+Sample commands to execute can be found in SetPlayground.scala file and SetDSLTestSuite.scala file.
+
 ##### Input
 
 ```scala

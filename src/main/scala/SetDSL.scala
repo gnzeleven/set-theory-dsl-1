@@ -34,7 +34,7 @@ object SetDSL {
   object Macro {
     // signature 1 - Macro(String)
     def apply(name: String): Expression = {
-      //logger.info("Apply method of Macro with only name")
+      logger.info("Apply method of Macro with only name")
       executionScope.get(name) match {
         case Some(expression: Expression) => expression
         case None => Expression.Empty
@@ -42,7 +42,7 @@ object SetDSL {
     }
     // signature 2 - Macro(String, Expression)
     def apply(name: String, expression: Expression): Unit = {
-      //logger.info("Apply method of Macro with name and expression")
+      logger.info("Apply method of Macro with name and expression")
       currentScope.put(name, expression)
       executionScope ++= currentScope
     }
@@ -90,7 +90,7 @@ object SetDSL {
       executionScope ++= globalScope
       currentScope = globalScope
       currScopeName = "global"
-      //logger.info("Context reset, ready to evaluate...")
+      logger.info("Context reset, ready to evaluate...")
       this._evaluate()
     }
 
@@ -113,7 +113,7 @@ object SetDSL {
               executionScope.contains(name) match {
                 case true => executionScope(name).asInstanceOf[HashSet[Any]]
                 case false => {
-                  //logger.info(s"Variable(\"${name}\") does not exist in any scope")
+                  logger.info(s"Variable(\"${name}\") does not exist in any scope")
                   HashSet[Any]()
                 }
               }
@@ -130,7 +130,7 @@ object SetDSL {
           // update the current state and the cache
           currentScope.put(variable.name, ret)
           executionScope ++= currentScope
-          //logger.info("Insert set success, updated execution context")
+          logger.info("Insert set success, updated execution context")
           ret
         }
 
@@ -140,7 +140,7 @@ object SetDSL {
           val ret = variable._evaluate() ++ value._evaluate()
           currentScope.put(variable.name, ret)
           executionScope ++= currentScope
-          //logger.info("Insert value success, updated execution context")
+          logger.info("Insert value success, updated execution context")
           ret
         }
 
@@ -169,9 +169,9 @@ object SetDSL {
           }
           // call the updateState method with currentScope
           try {
-            //logger.info(s"Trying to delete Variable(\"${variable.name}\")")
+            logger.info(s"Trying to delete Variable(\"${variable.name}\")")
             _updateState(variable.name, currentScope)
-            //logger.info(s"Delete Variable(${variable.name}) success, context updated")
+            logger.info(s"Delete Variable(${variable.name}) success, context updated")
           } catch {
             case ex: RuntimeException => ex.printStackTrace()
           }
@@ -207,9 +207,9 @@ object SetDSL {
           //_updateState(variable.name, currentScope)
           // call the updateState method with currentScope
           try {
-            //logger.info(s"Trying to update Variable(\"${variable.name}\")")
+            logger.info(s"Trying to update Variable(\"${variable.name}\")")
             _updateState(variable.name, currentScope)
-            //logger.info(s"Update Variable(${variable.name}) success, context updated")
+            logger.info(s"Update Variable(${variable.name}) success, context updated")
           } catch {
             case ex: RuntimeException => ex.printStackTrace()
           }
@@ -266,7 +266,7 @@ object SetDSL {
 
         // check if an object exist in a scope
         case Check(variable: Var, value: Value) => {
-          //logger.info(s"Checking if Value(${value.input}) exists in Variable(\"${variable.name}\")")
+          logger.info(s"Checking if Value(${value.input}) exists in Variable(\"${variable.name}\")")
           HashSet(variable._evaluate() contains value._evaluate().head)
         }
 
@@ -285,7 +285,7 @@ object SetDSL {
           // change the current scope to new scope
           currentScope = currentScope(name).asInstanceOf[mutable.Map[String, Any]]
           currScopeName = name
-          //logger.info(s"Going inside Scope(${name})")
+          logger.info(s"Going inside Scope(${name})")
           expression._evaluate()
         }
 
