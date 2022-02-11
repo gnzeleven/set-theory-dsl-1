@@ -93,6 +93,8 @@ Finally, all the set operations' evaluate methods are defined. Because, the prog
 
 #### Sample Execution
 
+##### Input
+
 ```scala
 // create a new variable - meaningOfLife and assign a value
 Assign(Var("meaningOfLife"), Value("The meaning of life is 42")).evaluate()
@@ -112,7 +114,46 @@ Scope("scope1", Intersection(Var("varByMacro"), Var("varByScope"))).evaluate()
 Scope("scope1", CartesianProduct(Var("varByMacro"), Var("varByScope"))).evaluate()
 
 ```
+##### Output
+```
+20:03:48.859 [main] INFO  org.cs474.setdsl.SetPlayground$ - Inside main method... Evaluating some example expressions
+***Trying to update a variable that doesn't exist***
+java.lang.RuntimeException: Cannot update a variable that does not exist in any scope
+	at org.cs474.setdsl.SetDSL$Expression._updateState$2(SetDSL.scala:202)
+	at org.cs474.setdsl.SetDSL$Expression._evaluate(SetDSL.scala:211)
+	at org.cs474.setdsl.SetDSL$Expression.evaluate(SetDSL.scala:94)
+	at org.cs474.setdsl.SetPlayground$.main(SetPlayground.scala:73)
+	at org.cs474.setdsl.SetPlayground.main(SetPlayground.scala)
+***Executing scope statement***
+HashSet(1.618, The meaning of life is 42)
+***Checking if one of the values composed by macro exists in its reference***
+HashSet(true)
+***Union operation***
+HashSet(true, 1.618, The meaning of life is 42)
+***Intersection operation***
+HashSet(The meaning of life is 42)
+***Cartesian Product operation***
+HashSet((true,The meaning of life is 42), (The meaning of life is 42,1.618), (The meaning of life is 42,The meaning of life is 42), (true,1.618))
 
-#### Resources
+Process finished with exit code 0
+```
 
-!----------------- ToDo -------------------------!
+#### References
+
+1. [What is Domain Specific Language](https://stackoverflow.com/questions/809574/what-is-a-domain-specific-language-anybody-using-it-and-in-what-way)
+
+2. [Rock the JVM Blog](https://blog.rockthejvm.com/)
+
+3. [Functional Programming in Scala](https://www.baeldung.com/scala/functional-programming)
+
+4. [Enumeration in Scala 3](https://dotty.epfl.ch/docs/reference/enums/enums.html)
+
+5. [Mutable Set Interface in Scala](https://www.geeksforgeeks.org/set-in-scala-set-1/)
+
+6. [A Comprehensive Guide to For-Comprehension in Scala](https://www.baeldung.com/scala/for-comprehension)
+
+7. [Exception Handling in Scala](https://www.baeldung.com/scala/exception-handling)
+
+8. [Scala Type Hierarchy](https://www.geeksforgeeks.org/scala-type-hierarchy/)
+
+9. [Recursive Evaluation of Collections in Scala](https://blog.rockthejvm.com/sorting/)

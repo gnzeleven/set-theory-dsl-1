@@ -20,7 +20,6 @@ object SetPlayground {
   def main(args: Array[String]): Unit = {
     logger.info("Inside main method... Evaluating some example expressions")
 
-    /*
     testValue.evaluate()
     testVar.evaluate()
 
@@ -63,23 +62,5 @@ object SetPlayground {
       Scope("scope1", Scope("scope2", SymmetricDifference(Var("set1"), Var("set2")))).evaluate())
     logger.info("CartesianProduct: " +
       Scope("scope1", Scope("scope2", CartesianProduct(Var("set1"), Var("set2")))).evaluate())
-    */
-    // create a new variable - meaningOfLife and assign a value
-    Assign(Var("meaningOfLife"), Value("The meaning of life is 42")).evaluate()
-    // create a new variable - newMeaningOfLife and assign evaluation of an insert statement
-    Assign(Var("newMeaningOfLife"), Insert(Seq(Var("meaningOfLife"), Value(42)))).evaluate()
-    // trying to update a variable that doesnt exist will throw an exception that is handled
-    Assign(Var("thisDoesntExist"), Update(Seq(Value("I do not exist")))).evaluate()
-    Thread.sleep(100)
-    // create a new macro and execute
-    Macro("m", Var("meaningOfLife"))
-    Assign(Var("varByMacro"), Insert(Seq(Value(true), Var("meaningOfLife")))).evaluate()
-    // using scopes
-    println(Scope("scope1", Assign(Var("varByScope"), Insert(Seq(Value(1.6180), Var("meaningOfLife"))))).evaluate())
-    Scope("scope1", Scope("scope2", Check(Var("varByMacro"), Value(true)))).evaluate()
-    // using set operations
-    Scope("scope1", Union(Var("varByMacro"), Var("varByScope"))).evaluate()
-    Scope("scope1", Intersection(Var("varByMacro"), Var("varByScope"))).evaluate()
-    Scope("scope1", CartesianProduct(Var("varByMacro"), Var("varByScope"))).evaluate()
   }
 }
