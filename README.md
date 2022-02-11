@@ -51,11 +51,47 @@ This requirement can be divided roughly into five steps.
 
 #### Installation
 
-!----------------- ToDo -------------------------!
+Tools: IntelliJ IDEA 2021.2.1(Community Edition), jdk 1.8.0_191, Scala 3.0.2, sbt 1.6.2
+
+##### To build the project:
+* Clone this repository through command line using 
+```
+> git clone https://github.com/gnzeleven/set-theory-dsl
+```
+* Open IntelliJ IDEA and navigate File -> Open Folder -> set-theory-dsl
+* To run tests, use the command 
+```
+> sbt clean compile test
+```
+* To build, run 
+```
+> sbt clean compile run
+``` 
+in the command line or 
+```
+> clean compile run
+``` 
+sequentially in sbt shell
 
 #### Project Structure
 
-!----------------- ToDo -------------------------!
+set-theory-dsl
+└───src
+    ├───main
+    │   ├───resources
+    │   │   ├───application.conf
+    │   │   ├───logback.xml
+    │   │   └───logback-test.xml
+    │   └───scala
+    │       ├───utils
+    │       │   ├───CreateLogger.scala
+    │       │   └───TestExpressions.scala    
+    │       ├───SetDSL.scala
+    │       └───SetPlayground.scala
+    └───test
+        └───scala
+            └───SetDSLTestSuite.scala
+
 
 #### Implementation
 
