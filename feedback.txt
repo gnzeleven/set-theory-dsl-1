@@ -1,0 +1,38 @@
+Grading
+--------------------------------------
+Maximum grade for this homework is 10%. 
+
+1. Only some basic expression language is implemented without scopes and assignments and macros and nothing else is done.
+Marks deducted: 0% 
+
+2. For each use of var instead of val:
+Number of `var` used: 0 
+Marks deducted: 0%
+
+3. for each non-spelling-related problem reported by the IntelliJ code analysis and inspection tool 0.2% will be substracted from the maximum grade
+Number of errors: 0
+Marks deducted: 0%
+
+4. having less than five unit and/or integration tests that show how your implemented features work: up to 5% lost;
+Minimum 5 Test cases: Yes 
+Marks deducted: 0%
+
+5. missing comments and explanations from the program: up to 5% lost;
+Marks deducted: 0%
+
+6. no instructions in your README.md on how to install and run your program: up to 5% lost;
+Marks deducted: 0%
+Comments: N/A
+
+7. The program crashes without completing the core functionality or it is incorrect: up to 10% lost;
+Marks deducted: 0%
+Comments: N/A
+
+8. Documentation exists but it is insufficient to understand how you assembled and deployed all language components: up to 8% lost;
+Marks deducted: 0%
+Comments: N/A
+
+Marks for Homework 1: 10%
+
+Comments: 
+Well Implemented and extesively documented. Can place the TestExpressions util file in the Tests directory, instead of source directory.
